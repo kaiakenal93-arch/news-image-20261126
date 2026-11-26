@@ -1,8 +1,8 @@
 # The World in One Image — Thursday 26 November 2026
 
-[![make.fun](https://img.shields.io/badge/make.fun-bounty-blue)](https://make.fun/bounty/news-image-20261126)
-[![Prize $100](https://img.shields.io/badge/prize-%24100-green)](https://make.fun/bounty/news-image-20261126)
-[![Entry](https://img.shields.io/badge/entry-news--image--20261126-orange)](https://make.fun/bounty/news-image-20261126)
+[![make.fun · news-image-20261126](https://make.fun/badge/news-image-20261126.svg)](https://make.fun/bounty/news-image-20261126?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
+[![rank](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/rank.svg)](https://make.fun/bounty/news-image-20261126/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
+[![reward](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/reward.svg)](https://make.fun/bounty/news-image-20261126?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
 
 An entry for the make.fun bounty
 [Sum up 26 November's world news in one image](https://make.fun/bounty/news-image-20261126).
