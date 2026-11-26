@@ -1,7 +1,10 @@
-// news-image-20261126 — "Sum up 26 November's world news in one image"
-// Written from scratch in this session. No network, no Date, no randomness:
-// every pixel is computed from fixed data, so two runs write identical bytes.
-// Node 22, standard library only (node:fs, node:zlib, node:crypto).
+// news-image-20261126 v2 — "Sum up 26 November's world news in one image"
+// v2 of the submitted v1 entry ("World in One Image", 96.42% provisional).
+// Evening stories added (Odesa grain ships, Bangkok refinery, mine toll 13),
+// a stale 9 Nov GPS story removed, hero scenes made more recognisable.
+// No network, no Date, no randomness: every pixel is computed from fixed
+// data, so two runs write identical bytes. Node 22, standard library only
+// (node:fs, node:zlib, node:crypto).
 import { writeFileSync, mkdirSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 import { createHash } from "node:crypto";
@@ -350,12 +353,14 @@ function drawSpaceScene(x: number, y: number, w: number, h: number): void {
   // orbit ellipse
   ellipseOutline(x + Math.floor(w * 0.5), y + Math.floor(h * 0.42), 138, 34, GOLD);
   ellipseOutline(x + Math.floor(w * 0.5), y + Math.floor(h * 0.42), 138, 34, [120, 130, 145]);
-  // satellites on the orbit
+  // satellites on the orbit (five: a small constellation, one gold data-centre bird)
   drawSatellite(x + 62, y + 26, 1, WHITE, [150, 170, 200]);
   drawSatellite(x + 252, y + 44, 1, WHITE, [150, 170, 200]);
   drawSatellite(x + 168, y + 14, 1, GOLD, [220, 190, 110]);
+  drawSatellite(x + 120, y + 52, 1, WHITE, [150, 170, 200]);
+  drawSatellite(x + 210, y + 18, 1, [200, 220, 240], [150, 170, 200]);
   // small dots of a swarm
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 14; i++) {
     const sx = x + 24 + ((i * 31) % (w - 48));
     const sy = y + 58 + ((i * 17) % 26);
     rect(sx, sy, 2, 2, WHITE);
@@ -390,16 +395,27 @@ function drawFireScene(x: number, y: number, w: number, h: number): void {
   // road
   rect(x, y + h - 26, w, 26, [24, 24, 28]);
   for (let i = 0; i < 10; i++) rect(x + 8 + i * 34, y + h - 14, 16, 3, [220, 200, 120]);
-  // tanker (overturned, on its side)
+  // tanker (overturned, on its side): capsule tank, hazard diamond, wheels
+  // sticking up from the top so it reads as flipped, fuel puddle below
   const tx = x + 52;
   const ty = y + h - 62;
-  roundRect(tx, ty, 190, 34, 12, [200, 200, 205]);
+  roundRect(tx, ty, 190, 34, 17, [200, 200, 205]);
   rect(tx + 20, ty + 6, 150, 22, [228, 120, 40]);
   rect(tx + 150, ty + 4, 40, 26, [180, 180, 185]);
-  fillCircle(tx + 34, ty + 36, 9, [15, 15, 18]);
-  fillCircle(tx + 150, ty + 36, 9, [15, 15, 18]);
-  fillCircle(tx + 34, ty + 36, 4, [120, 120, 125]);
-  fillCircle(tx + 150, ty + 36, 4, [120, 120, 125]);
+  fillPoly(
+    [
+      [tx + 95, ty + 8],
+      [tx + 103, ty + 16],
+      [tx + 95, ty + 24],
+      [tx + 87, ty + 16],
+    ],
+    RED,
+  );
+  fillCircle(tx + 34, ty - 4, 8, [15, 15, 18]);
+  fillCircle(tx + 150, ty - 4, 8, [15, 15, 18]);
+  fillCircle(tx + 34, ty - 4, 3, [120, 120, 125]);
+  fillCircle(tx + 150, ty - 4, 3, [120, 120, 125]);
+  fillEllipse(tx + 95, ty + 40, 70, 5, [228, 120, 40]);
   // flames: outer layer + smaller inner core so they read as fire, not hills
   // (all tops stay inside the 104px scene; tanker top is ty)
   drawFlame(tx + 34, ty - 38, 40, 40, [212, 43, 30]);
@@ -446,16 +462,20 @@ function drawStormScene(x: number, y: number, w: number, h: number): void {
     const ry = y + 52 + ((i * 29) % 40);
     line(rx, ry, rx - 5, ry + 12, [170, 200, 235], 1);
   }
-  // parade balloon (round, red, with a thin white belt)
+  // parade balloon: envelope with vertical panel seams (no horizontal belt,
+  // so it reads as a balloon, not a sign), gold cap, basket with a rim
   const bx = x + 118;
   const by = y + 62;
   fillEllipse(bx, by, 52, 40, RED);
-  rect(bx - 50, by - 5, 100, 10, [240, 240, 235]);
+  vline(bx - 18, by - 37, 74, [140, 20, 25], 2);
+  vline(bx + 18, by - 37, 74, [140, 20, 25], 2);
+  fillEllipse(bx, by - 38, 10, 5, GOLD);
   // balloon strings + basket
-  line(bx - 24, by + 36, bx - 12, by + 52, WHITE, 1);
-  line(bx + 24, by + 36, bx + 12, by + 52, WHITE, 1);
+  line(bx - 24, by + 36, bx - 14, by + 52, WHITE, 1);
+  line(bx + 24, by + 36, bx + 14, by + 52, WHITE, 1);
   line(bx, by + 38, bx, by + 52, WHITE, 1);
-  rect(bx - 14, by + 52, 28, 14, [150, 105, 50]);
+  rect(bx - 16, by + 52, 32, 14, [150, 105, 50]);
+  rect(bx - 16, by + 52, 32, 3, [120, 80, 35]);
   // small crowd umbrellas
   for (let i = 0; i < 5; i++) {
     const ux = x + 30 + i * 58;
@@ -526,28 +546,25 @@ function drawIcon(kind: string, x: number, y: number): void {
       INK,
     );
     rect(x + 16, y + 22, 4, 8, RED);
-  } else if (kind === "scales") {
-    vline(x + 18, y + 6, 22, INK, 2);
-    hline(x + 8, y + 10, 20, INK, 2);
-    line(x + 8, y + 10, x + 6, y + 18, INK, 1);
-    line(x + 28, y + 10, x + 30, y + 18, INK, 1);
+  } else if (kind === "ship") {
+    // cargo ship: hull, containers, bridge, smoke, sea line
     fillPoly(
       [
-        [x + 2, y + 18],
-        [x + 10, y + 18],
-        [x + 6, y + 24],
+        [x + 4, y + 22],
+        [x + 32, y + 22],
+        [x + 28, y + 30],
+        [x + 8, y + 30],
       ],
-      GOLD,
+      INK,
     );
-    fillPoly(
-      [
-        [x + 26, y + 18],
-        [x + 34, y + 18],
-        [x + 30, y + 24],
-      ],
-      GOLD,
-    );
-    hline(x + 10, y + 30, 16, INK, 2);
+    rect(x + 8, y + 14, 6, 8, RED);
+    rect(x + 15, y + 14, 6, 8, GOLD);
+    rect(x + 22, y + 14, 6, 8, BLUE);
+    rect(x + 27, y + 8, 5, 14, WHITE);
+    rect(x + 27, y + 8, 5, 2, INK);
+    fillCircle(x + 10, y + 10, 2, GREY);
+    fillCircle(x + 14, y + 7, 2, GREY);
+    line(x + 4, y + 33, x + 32, y + 33, BLUE, 1);
   }
 }
 
@@ -589,10 +606,10 @@ interface Mid {
   claim: boolean;
 }
 const MID: Mid[] = [
+  { icon: "ship", tag: "BLACK SEA", lines: ["RUSSIA HITS", "2 GRAIN SHIPS"], sub: "100,000 TONS OF GRAIN", claim: false },
   { icon: "missile", tag: "MIDDLE EAST", lines: ["HOUTHI HITS", "GULF PORTS"], sub: "OIL JUMPS; JEDDAH, JAZAN CLAIMED", claim: true },
   { icon: "doc", tag: "RUSSIA", lines: ["DEAD: 490,334"], sub: "LEAKED FILES; TRUE TOLL MAY TOP 700,000", claim: false },
   { icon: "chart", tag: "MARKETS", lines: ["TRUMP TARIFFS", "HIT 14 NATIONS"], sub: "NASDAQ -0.62%, NVIDIA -3.91% AT CLOSE", claim: false },
-  { icon: "towers", tag: "DIPLOMACY", lines: ["ABU DHABI", "TALKS STALL"], sub: "TALKS STALL; PRISONER SWAP ONLY", claim: false },
   { icon: "plane", tag: "UKRAINE", lines: ["UKRAINE HITS", "5 WARPLANES"], sub: "3 MIG-31S, 2 SU-34S DAMAGED, KYIV CLAIMS", claim: true },
   { icon: "scales", tag: "ISRAEL", lines: ["NETANYAHU", "CASES EASE"], sub: "JUDGES URGE DROPPING ONE BRIBERY CASE", claim: false },
 ];
@@ -603,25 +620,25 @@ interface Brief {
 }
 const BRIEF_A: Brief[] = [
   { cat: RUST, text: "SUDAN: RSF DRONE KILLS 19 CIVILIANS" },
-  { cat: OCHRE, text: "BOGOR: MINE FLOOD KILLS 9, 17 TRAPPED" },
+  { cat: OCHRE, text: "BOGOR: MINE FLOOD KILLS 13, 13 TRAPPED" },
   { cat: BLUE, text: "SHENZHOU-24: FIRST PAKISTANI IN ORBIT" },
   { cat: RUST, text: "GAZA: STORM THREATENS 1.76M IN TENTS" },
   { cat: PURPLE, text: "LIBYA: 2 NAVY OFFICERS KILLED BY DRONE" },
-  { cat: RUST, text: "LEBANON PLANS SECOND INTL AIRPORT" },
+  { cat: RUST, text: "BANGKOK: REFINERY BLAST HURTS 7" },
   { cat: BLUE, text: "POLAND WANTS NATO AIR SHIELD" },
   { cat: BLUE, text: "MURMANSK GOVERNOR HELD FOR GRAFT" },
   { cat: BLUE, text: "NATIONS URGE RUSSIA: STOP RIOT AGENTS" },
   { cat: BLUE, text: "NATO VOWS TO DEFEND SPACE" },
   { cat: BLUE, text: "UKRAINE: 88 OF 112 DRONES DOWNED" },
   { cat: BLUE, text: "EU PLANS $50BN TECH FUND" },
-  { cat: BLUE, text: "GPS JAMMING HIT 140 NORTH SEA FLIGHTS" },
+  { cat: BLUE, text: "EU SUMMIT: 45BN EURO UKRAINE LOAN" },
   { cat: GREEN, text: "BIRTHRIGHT ORDER BLOCKED BY 2ND JUDGE" },
   { cat: GREEN, text: "ARMY BLOWS UP 4.5 TONS OF EXPLOSIVES" },
   { cat: GREEN, text: "ECUADOR TALKS WITH US ON OPERATIONS" },
 ];
 const BRIEF_B: Brief[] = [
   { cat: GREEN, text: "UCL: PSG HELD, BAYERN BEATEN BY LILLE" },
-  { cat: GREEN, text: "NBA UNVEILS $11BN EUROPE ARENA PLAN" },
+  { cat: GREEN, text: "DOW CLOSES ABOVE 50,000 FIRST TIME" },
   { cat: GREEN, text: "ABREGO GARCIA ARRIVES IN SPAIN" },
   { cat: GREEN, text: "DEMOCRATS FLIP NORTH CAROLINA SENATE" },
   { cat: GREEN, text: "CALIFORNIA BRACES FOR KING TIDE FLOODS" },
@@ -631,10 +648,10 @@ const BRIEF_B: Brief[] = [
   { cat: OCHRE, text: "CHINA STILL GETS NVIDIA AI CHIPS" },
   { cat: OCHRE, text: "AUSTRALIA SIGNS PACT WITH SOLOMONS" },
   { cat: OCHRE, text: "HANOI HOT POT BLAST KILLS 6" },
-  { cat: OCHRE, text: "MALAYSIA TO RETURN 6,803 MYANMAR PEOPLE" },
-  { cat: PURPLE, text: "KENYA CULT LEADER FACES NEW CHARGES" },
-  { cat: PURPLE, text: "NIGERIA SEIZES $220M METH, 5 HELD" },
-  { cat: PURPLE, text: "TURKIYE SENDS F-16S TO SOMALIA" },
+  { cat: GREEN, text: "GUKESH-SINDAROV: GAME 3 TONIGHT, 1-1" },
+  { cat: GREEN, text: "INDIA MARKS 18 YEARS SINCE 26/11" },
+  { cat: PURPLE, text: "NEPAL: 213 INDIANS DECLARED MISSING" },
+  { cat: PURPLE, text: "KIM INSPECTS NUCLEAR WARHEADS" },
   { cat: GREY, text: "DURAN DURAN'S ANDY TAYLOR DIES, 65" },
 ];
 
@@ -715,7 +732,7 @@ function drawMid(): void {
 }
 
 function drawBrief(): void {
-  drawText(8, 592, "AROUND THE WORLD \u2022 32 MORE STORIES", 2, RED);
+  drawText(8, 592, "AROUND THE WORLD \u2022 32 MORE STORIES \u2022 9 REGIONS", 2, RED);
   hline(8, 610, W - 16, RED, 2);
   const rowH = 17;
   const cols = [BRIEF_A, BRIEF_B];
@@ -744,17 +761,17 @@ function drawHonesty(): void {
   rect(x, y + h - 1, w, 1, GOLD);
   rect(x, y, 1, h, GOLD);
   rect(x + w - 1, y, 1, h, GOLD);
-  drawTextCenter(x + Math.floor(w / 2), y + 6, "CLAIMED VS CONFIRMED - READ IT HONESTLY", 2, RED);
+  drawTextCenter(x + Math.floor(w / 2), y + 6, "CLAIMED VS CONFIRMED \u2022 DATE CHECK: THU 26 NOV 2026", 2, RED);
   const colW = Math.floor((w - 24) / 2);
   // left: claimed
   drawText(x + 12, y + 28, "CLAIMED - NOT YET VERIFIED", 2, RED);
   textBox(x + 12, y + 46, colW, "HOUTHI STRIKES; IRAN MINE CLAIMS;", 2, 15, 1, INK, "honesty claimed");
-  textBox(x + 12, y + 61, colW, "SAVASLEYKA; GPS BLAME; EXECUTIONS STAYED", 2, 15, 1, INK, "honesty claimed 2");
+  textBox(x + 12, y + 61, colW, "SAVASLEYKA; CARGO CLAIM; EXECUTIONS", 2, 15, 1, INK, "honesty claimed 2");
   // right: confirmed
   const rx = x + 12 + colW + 12;
   drawText(rx, y + 28, "CONFIRMED - AS REPORTED", 2, GREEN);
-  textBox(rx, y + 46, colW, "CAIRO 31; SUDAN 19; FCC 1M SATELLITES", 2, 15, 1, INK, "honesty confirmed");
-  textBox(rx, y + 61, colW, "MACY'S DELAY; ROSSTAT LEAK", 2, 15, 1, INK, "honesty confirmed 2");
+  textBox(rx, y + 46, colW, "CAIRO 31; SUDAN 19; FCC 1M; ROSSTAT", 2, 15, 1, INK, "honesty confirmed");
+  textBox(rx, y + 61, colW, "MACY'S DELAY; BOGOR 13; BANGKOK 7 HURT", 2, 15, 1, INK, "honesty confirmed 2");
 }
 
 function drawFooter(): void {
@@ -762,7 +779,7 @@ function drawFooter(): void {
   drawTextCenter(
     W / 2,
     980,
-    "SOURCES: REUTERS \u2022 BBC \u2022 AP \u2022 CNN \u2022 WSJ \u2022 FOX WEATHER \u2022 UEFA \u2022 NATURE \u2022 AFP",
+    "SOURCES: REUTERS \u2022 BBC \u2022 AP \u2022 CNN \u2022 WSJ \u2022 FOX WEATHER \u2022 UEFA \u2022 NATURE \u2022 AFP \u2022 FIDE",
     2,
     WHITE,
   );
