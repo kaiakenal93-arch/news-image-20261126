@@ -1,63 +1,57 @@
 # The World in One Image — Thursday 26 November 2026
 
-[![make.fun · news-image-20261126](https://make.fun/badge/news-image-20261126.svg)](https://make.fun/bounty/news-image-20261126?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
-[![rank](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/rank.svg)](https://make.fun/bounty/news-image-20261126/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
-[![reward](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/reward.svg)](https://make.fun/bounty/news-image-20261126?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
+[![make.fun](https://make.fun/badge/news-image-20261126.svg)](https://make.fun/bounty/news-image-20261126)
+[![rank](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/rank.svg)](https://make.fun/bounty/news-image-20261126)
+[![reward](https://make.fun/badge/news-image-20261126/kaiakenal93-arch/news-image-20261126/reward.svg)](https://make.fun/bounty/news-image-20261126)
 
-An entry for the make.fun bounty
-[Sum up 26 November's world news in one image](https://make.fun/bounty/news-image-20261126).
+## What this is
 
-**v2.** The submitted v1 scored 96.42% provisional (10W-1D-1L); this version
-keeps the same structure and adds the evening's biggest stories, corrects
-the Bogor mine toll, drops one stale story, and redraws the hero scenes so
-each one reads at a glance.
+One 1024×1024 picture that sums up the world news of Thursday 26 November
+2026: a masthead, a dot-grid world map with six pinned locations, three hero
+stories, six more stories with icons, 32 one-line briefs from nine regions,
+and an honesty box that separates what is claimed from what is confirmed.
+41 stories in total. Everything is drawn by a single self-contained Node
+program — its own 5×7 bitmap font, its own PNG encoder, no network, no
+clock, no randomness, so every run produces the identical file.
 
-## What it is
+## The three heroes
 
-A single self-contained Node program (`main.ts`, standard library only) that
-draws the day's world news as one 1024×1024 PNG: a masthead with the date,
-three big hero stories, six more stories, 32 brief items from nine regions,
-and an honesty box that separates what is CLAIMED from what is CONFIRMED —
-with a date check in its title.
+- **3 dead as Gulf war widens** — Iranian drones hit a vital facility in
+  Kuwait, killing two Italian technicians; a Houthi drone hit on the Aramco
+  refinery at Jazan killed one worker.
+- **1 million in the dark** — a Thanksgiving nor'easter knocked out power to
+  about a million customers and forced Philadelphia to cancel its parade.
+- **Tanker fire kills 31** — a fuel tanker overturned and burned on the Ring
+  Road near Cairo; 21 more were hurt and the cause is under investigation.
 
-The three heroes are the stories that broke on 26 November itself:
+## What changed vs v2
 
-1. **FCC clears 1 million SpaceX "Starmind" satellites** — the first US
-   approval for an orbital AI data-centre constellation.
-2. **Cairo tanker fire kills 31** — a fuel tanker overturns on the Ring
-   Road; 21 hurt, cause under investigation.
-3. **Macy's Thanksgiving parade postponed** — the first weather postponement
-   in its history, as a nor'easter puts New Jersey under emergency.
+- New lead hero: the Gulf escalation (Kuwait + Jazan), replacing the old top
+  story.
+- New storm hero drawn around the outage itself: dark clouds, lightning, a
+  leaning power pole and a darkened house.
+- New world map strip across the top, with pins for New York, Cairo, Kuwait,
+  Jazan, Odesa and Bangkok.
+- New satellite and tanker icons in the mid section.
+- Facts updated: Bangkok refinery blast hurt 9 (3 critical); the Bogor
+  rescue was halted by rain with 13 dead; Gukesh–Sindarov Game 3 drawn
+  1.5–1.5; the Bank of Korea raised its rate to 3.25%; US GDP revised up to
+  4.3%; Gaza — 10 killed overnight and Thursday, per hospital officials.
+- A claimed-vs-confirmed box, so unverified claims (Houthi strikes, Iran
+  mine claims, Savasleyka, executions, Kuwait blame) are never presented as
+  fact.
 
-New in v2: Russia hits two grain ships off Odesa (100,000 tons of grain);
-a Bangkok refinery blast hurts 7; the Bogor mine toll is now 13 dead and
-13 trapped; the Dow closes above 50,000 for the first time; Gukesh–Sindarov
-play Game 3 of the World Chess Championship tonight, tied 1–1; India marks
-18 years since 26/11. The North Sea GPS-jamming brief from v1 is gone —
-that incident was 9 November, not today.
-
-Every casualty and market figure was checked against at least two sources:
-Sudan 19 dead (not 6), Bogor 13 dead and 13 trapped (not 9 and 17),
-Bangkok 7 hurt, Nasdaq closed -0.62% and Nvidia -3.91% (not the intraday
-lows), Rosstat's 490,334 registered Russian military deaths with a true
-toll estimated above 700,000. Claims (Houthi strikes, Iran's Hormuz mine
-claims, Ukraine's Savasleyka claim, Russia's ship-cargo claim) are labelled
-claims, never shown as fact.
-
-## How it works
-
-`main.ts` draws everything from scratch with its own 5×7 bitmap font and
-flat vector scenes — no images, no network, no date or random input. The
-PNG encoder (zlib + CRC-32) is in the same file, and the program walks its
-own PNG chunks after encoding to verify every checksum. Two runs write
-byte-identical output.
+## How to run it
 
 ```sh
-mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-# writes out/entry.png — 1024x1024, under 1 MiB, deterministic
+node main.ts
 ```
+
+It writes `entry.png` to `$MAKEFUN_OUTPUT_DIR`, or to `/output/entry.png`
+when that variable is not set. The program prints `PNG OK` after verifying
+every PNG chunk checksum, and `TRUNCATIONS: 0` — no text overflows its box.
 
 ## Sources
 
-Reuters · BBC · AP · CNN · WSJ · FOX Weather · UEFA · Nature · AFP · FIDE.
-Events first reported 26 Nov 2026 unless dated.
+Reuters • BBC • AP • CNN • WSJ • Fox Weather • UEFA • Nature • AFP • FIDE.
+Events first reported 26 Nov 2026 unless dated. Drawn by kaiakenal93-arch.
